@@ -1,12 +1,58 @@
 import mongoose from 'mongoose';
+import app from '../app.js';
 import { Activity, Leaderboard, Team, User, Workout } from '../models/index.js';
 
 const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
+
+async function verifyApiResponses(serverPort: number): Promise<void> {
+  const routes = ['users', 'teams', 'activities', 'leaderboard', 'workouts'];
+  const verification = new Map<string, number>();
+
+  for (const route of routes) {
+    const response = await fetch(`http://127.0.0.1:${serverPort}/api/${route}`);
+
+    if (!response.ok) {
+      throw new Error(`API route /api/${route} failed with status ${response.status}`);
+    }
+
+    const payload = (await response.json()) as unknown[];
+
+    if (!Array.isArray(payload) || payload.length === 0) {
+      throw new Error(`API route /api/${route} did not return seeded records.`);
+    }
+
+    verification.set(route, payload.length);
+  }
+
+  console.log(
+    `Verified API responses: ${Array.from(verification.entries())
+      .map(([route, count]) => `${route}=${count}`)
+      .join(', ')}`,
+  );
+}
+
+async function startVerificationServer(): Promise<{ server: ReturnType<typeof app.listen>; port: number }> {
+  const server = app.listen(0, '127.0.0.1');
+
+  await new Promise<void>((resolve, reject) => {
+    server.once('error', reject);
+    server.once('listening', () => resolve());
+  });
+
+  const address = server.address();
+
+  if (!address || typeof address === 'string') {
+    throw new Error('Unable to determine the API server port for verification.');
+  }
+
+  return { server, port: address.port };
+}
 
 async function seedDatabase() {
   try {
     await mongoose.connect(connectionString);
 
+    console.log('Seed the octofit_db database with test data');
     console.log('Connected to octofit_db');
 
     await Promise.all([
@@ -102,7 +148,23 @@ async function seedDatabase() {
       },
     ]);
 
-    console.log('Database seeding complete: 3 users, 2 teams, 3 activities, 3 leaderboard entries, and 2 workouts');
+    const { server, port } = await startVerificationServer();
+
+    try {
+      await verifyApiResponses(port);
+      console.log('Database seeding complete: 3 users, 2 teams, 3 activities, 3 leaderboard entries, and 2 workouts');
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        server.close((error) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
+    }
+
     await mongoose.disconnect();
   } catch (error) {
     console.error('Error seeding database:', error);
@@ -110,4 +172,4 @@ async function seedDatabase() {
   }
 }
 
-seedDatabase();
+void seedDatabase();
