@@ -1,0 +1,32 @@
+.app-shell { min-height: 100svh; background: var(--paper); }
+.topbar { height: 82px; padding: 0 5vw; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.brand { color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 10px; font: 700 22px/1 var(--display); letter-spacing: 0; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; background: var(--coral); color: white; border-radius: 50%; font: 800 18px/1 var(--display); }
+.eyebrow, .kicker, .nav-label { text-transform: uppercase; letter-spacing: .12em; font: 700 11px/1 var(--body); color: var(--muted); }
+.app-layout { display: grid; grid-template-columns: 220px 1fr; max-width: 1440px; margin: 0 auto; }
+.sidebar { padding: 48px 24px; border-right: 1px solid var(--line); min-height: calc(100svh - 83px); }
+.nav-label { display: block; margin: 0 16px 18px; }
+.nav-link { display: block; padding: 11px 16px; margin: 3px 0; border-radius: 3px; color: var(--muted); text-decoration: none; font-weight: 700; transition: .2s ease; }
+.nav-link:hover, .nav-link.active { color: var(--ink); background: var(--wash); }
+.nav-link.active { box-shadow: inset 3px 0 var(--coral); }
+.main-content { padding: 72px clamp(28px, 6vw, 96px); max-width: 1050px; width: 100%; box-sizing: border-box; }
+.page-heading { margin-bottom: 48px; max-width: 700px; }
+.page-heading h1 { margin: 13px 0 10px; font: 700 clamp(42px, 6vw, 76px)/.98 var(--display); letter-spacing: 0; color: var(--ink); }
+.page-heading p { color: var(--muted); font-size: 18px; }
+.overview-grid, .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.overview-card, .data-card { text-decoration: none; color: var(--ink); border: 1px solid var(--line); padding: 28px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; transition: transform .2s ease, border-color .2s ease; }
+.overview-card:hover, .data-card:hover { transform: translateY(-4px); border-color: var(--coral); }
+.feature-card { background: var(--coral); color: white; border-color: var(--coral); }
+.card-number { color: var(--coral); font: 700 11px/1 var(--body); letter-spacing: .12em; }
+.feature-card .card-number { color: #ffd4c6; }
+.overview-card strong, .data-card h2 { font: 700 23px/1.1 var(--display); letter-spacing: 0; }
+.overview-card span:last-child, .data-card p, .data-card small { color: var(--muted); font-size: 14px; }
+.feature-card span:last-child { color: #ffe9e2; }
+.record-list, .leaderboard-list { border-top: 1px solid var(--line); }
+.record-row, .leader-row { min-height: 76px; display: grid; grid-template-columns: 1fr auto auto; gap: 28px; align-items: center; border-bottom: 1px solid var(--line); }
+.record-row div { display: flex; flex-direction: column; gap: 4px; }.record-row span, .user-details span { color: var(--muted); font-size: 13px; }.record-row b, .leader-row b { font: 700 15px var(--display); }
+.leader-row { grid-template-columns: 52px 1fr auto; padding: 0 18px; }.leader-row-top { background: var(--wash); }.rank { color: var(--coral); font: 700 25px var(--display); }.leader-row strong { font: 700 18px var(--display); }
+.user-row { grid-template-columns: 42px 1fr auto; }.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: white; font-weight: 700; }.user-details { display: flex; flex-direction: column; gap: 4px; }.handle { color: var(--coral) !important; }
+.data-card h2 { margin: 18px 0 8px; }.data-card p { margin: 0 0 25px; line-height: 1.5; }.difficulty { color: var(--coral); text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+.empty-state, .error-state { padding: 28px 0; color: var(--muted); }.error-state { color: #a13d26; background: #fff1ec; padding: 14px 18px; margin-bottom: 24px; }
+@media (max-width: 760px) { .topbar { padding: 0 20px; }.eyebrow { display: none; }.app-layout { display: block; }.sidebar { min-height: auto; padding: 14px 20px; border-right: 0; border-bottom: 1px solid var(--line); display: flex; gap: 3px; overflow-x: auto; }.nav-label { display: none; }.nav-link { white-space: nowrap; }.main-content { padding: 48px 20px; }.overview-grid, .card-grid { grid-template-columns: 1fr; }.record-row { gap: 12px; grid-template-columns: 1fr auto; }.record-row > b:last-child { display: none; }.handle { display: none; } }
