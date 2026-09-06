@@ -5,8 +5,8 @@ export const apiOrigin = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
   : ''
 
-export async function getRecords(resource) {
-  const response = await fetch(`${apiOrigin}/api/${resource}/`)
+export async function getRecords(resource, endpoint = `${apiOrigin}/api/${resource}/`) {
+  const response = await fetch(endpoint)
   if (!response.ok) {
     throw new Error(`Unable to load ${resource} (${response.status})`)
   }

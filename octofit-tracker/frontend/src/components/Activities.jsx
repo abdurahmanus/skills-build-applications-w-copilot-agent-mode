@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import { formatDate, getRecords } from '../api.js'
 
+const activitiesEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : '/api/activities/'
+
 function Activities() {
   const [activities, setActivities] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    getRecords('activities').then(setActivities).catch((reason) => setError(reason.message))
+    getRecords('activities', activitiesEndpoint).then(setActivities).catch((reason) => setError(reason.message))
   }, [])
 
   return <ResourcePage title="Activities" intro="Every session counts." error={error}>
